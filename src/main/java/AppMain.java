@@ -7,11 +7,11 @@ public class AppMain {
 
 	public static void main(String[] args) {
 		try {
-			DocumentParser parser = DocumentParserFactory.getParserFactory("records.csv");
-			List<TransactionRecord> records = parser.parse();
+			DocumentParser parser = DocumentParserFactory.getParserFactory("records.xml");
+			List<Record> records = parser.parse();
+			System.out.println(records);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }

@@ -18,31 +18,31 @@ public class CsvDocumentParser implements DocumentParser {
 		this.fileName = fileName;
 	}
 
-	public List<TransactionRecord> parse() {
+	public List<Record> parse() throws IOException {
 
 		CSVFormat format = CSVFormat.RFC4180.withHeader().withDelimiter(',');
-		List<TransactionRecord> records = new ArrayList<TransactionRecord>();
-		CSVParser parser;
+		List<Record> records = new ArrayList<Record>();
+		CSVParser parser = null;
 		try {
 			parser = new CSVParser(new FileReader("records.csv"), format);
 
 			for (CSVRecord entry : parser) {
-				TransactionRecord record = new TransactionRecord();
+				Record record = new Record();
 				record.setReference(Integer.parseInt(entry.get("Reference")));
 				record.setAccountNumber(entry.get("AccountNumber"));
 				record.setDescripton(entry.get("Description"));
-				record.setStartBalance(Integer.parseInt(entry.get("Start Balance")));
-				record.setMutation(Integer.parseInt(entry.get("Mutation")));
-				record.setEndBalance(Integer.parseInt(entry.get("End Balance")));
+				record.setStartBalance(Double.parseDouble(entry.get("Start Balance")));
+				record.setMutation(Double.parseDouble(entry.get("Mutation")));
+				record.setEndBalance(Double.parseDouble(entry.get("End Balance")));
 				records.add(record);
 			}
-			parser.close();
-			System.out.println(records);
-
+	
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			parser.close();
 		}
 
 		return records;
