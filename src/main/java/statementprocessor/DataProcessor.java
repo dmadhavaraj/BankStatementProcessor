@@ -32,4 +32,26 @@ public class DataProcessor {
 		return invalidMutationsRecords;
 	}
 
+	public List<ResultRecord> prepareReport(List<Record> duplicateReferencerecords,
+			List<Record> invalidMutationsRecords) {
+		List<ResultRecord> results = new ArrayList<ResultRecord>();
+		for (Record record : this.records) {
+			ResultRecord result = new ResultRecord();
+			result.setReferenceNum(record.getReference());
+			StringBuffer description = new StringBuffer();
+			if (duplicateReferencerecords.contains(record)) {
+				description.append("Duplicate Reference Number ");
+			}
+			if (invalidMutationsRecords.contains(record)) {
+				description.append(" Invalid Mutation Found");
+			}
+			if(description.length() == 0) {
+				description.append("ok");
+			}
+			result.setDescription(description.toString());
+			results.add(result);
+		}
+		return results;
+	}
+
 }

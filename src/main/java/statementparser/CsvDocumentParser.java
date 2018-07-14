@@ -2,6 +2,7 @@ package statementparser;
 
 import model.*;
 import java.util.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,10 +13,10 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 public class CsvDocumentParser implements DocumentParser {
-	String fileName;
+	File file;
 
-	public CsvDocumentParser(String fileName) {
-		this.fileName = fileName;
+	public CsvDocumentParser(File file) {
+		this.file = file;
 	}
 
 	public List<Record> parse() throws IOException {
@@ -24,7 +25,7 @@ public class CsvDocumentParser implements DocumentParser {
 		List<Record> records = new ArrayList<Record>();
 		CSVParser parser = null;
 		try {
-			parser = new CSVParser(new FileReader("records.csv"), format);
+			parser = new CSVParser(new FileReader(this.file), format);
 
 			for (CSVRecord entry : parser) {
 				Record record = new Record();
@@ -36,7 +37,7 @@ public class CsvDocumentParser implements DocumentParser {
 				record.setEndBalance(Double.parseDouble(entry.get("End Balance")));
 				records.add(record);
 			}
-	
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

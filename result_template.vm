@@ -1,0 +1,21 @@
+<HTML>
+    <HEAD>
+      <TITLE>Results</TITLE>
+    </HEAD>
+    <BODY>
+    <H1>Rabobank Customer Statement Processor Results</H1>
+      <CENTER>
+      <TABLE BORDER="1">
+      	<TH>Reference Number</TH>
+      	<TH>Description</TH>
+		#foreach( $result in $results )
+          <TR>
+            <TD>$result.referenceNum</TD>
+            <TD>$result.description</TD>
+          </TR>
+		#end
+      </TABLE>
+      <BR/>
+      </CENTER>
+     </BODY>
+  </HTML>

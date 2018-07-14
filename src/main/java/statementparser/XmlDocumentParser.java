@@ -13,22 +13,19 @@ import model.ListOfRecords;
 import model.Record;
 
 public class XmlDocumentParser implements DocumentParser {
-	String fileName;
+	File file;
 
-	public XmlDocumentParser(String fileName) {
-		this.fileName = fileName;
+	public XmlDocumentParser(File file) {
+		this.file = file;
 	}
 
 	public List<Record> parse() throws IOException {
 		List<Record> records = new ArrayList<Record>();
 
 		try {
-
-			// File file = new File(fileName);
-			File file = new File("records.xml");
 			JAXBContext jaxbContext = JAXBContext.newInstance(ListOfRecords.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			ListOfRecords lstRecord = (ListOfRecords) jaxbUnmarshaller.unmarshal(file);
+			ListOfRecords lstRecord = (ListOfRecords) jaxbUnmarshaller.unmarshal(this.file);
 			records = lstRecord.getRecords();
 		} catch (JAXBException e) {
 			e.printStackTrace();
