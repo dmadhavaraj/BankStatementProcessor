@@ -7,6 +7,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * @author Madhav
+ *  This model object holds the list of transaction records
+ *
+ */
 @XmlRootElement(name = "records")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ListOfRecords {

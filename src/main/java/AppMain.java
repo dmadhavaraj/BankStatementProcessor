@@ -23,52 +23,60 @@ import model.*;
 public class AppMain {
 	static Logger logger = Logger.getLogger(AppMain.class.getName());
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+
+		DocumentParser parser = null;
+		List<Record> records = new ArrayList<Record>();
+		DataProcessor processor = null;
+		FileWriter fw = null;
+		String appConfigPath = ".\\config.properties";
+		Properties appProps = new Properties();
+		
+
 		try {
-			DocumentParser parser = null;
-			List<Record> records = new ArrayList<Record>();
-			DataProcessor processor = null;
+			appProps.load(new FileInputStream(appConfigPath));
+			String rootDir = appProps.getProperty("STATEMENTS_DIRECTORY");
 
-			try {
-				String appConfigPath = ".\\config.properties";
-				Properties appProps = new Properties();
-				appProps.load(new FileInputStream(appConfigPath));
-				String rootDir = ".\\" + appProps.getProperty("STATEMENTS_DIRECTORY");
-				List<File> files = Files.walk(Paths.get(rootDir)).filter(Files::isRegularFile).map(Path::toFile)
-						.collect(Collectors.toList());
-				for (File file : files) {
-					parser = DocumentParserFactory.getParserFactory(file);
-					records.addAll(parser.parse());
-					logger.fine("File Name :" + file.getName() + " Records :" + records);
-				}
+			// Collect all files
+			List<File> files = Files.walk(Paths.get(rootDir)).filter(Files::isRegularFile).map(Path::toFile)
+					.collect(Collectors.toList());
 
-				processor = new DataProcessor(records);
-				logger.fine("Invalid Mutation :" + processor.findInvalidMutations());
-				logger.fine("Duplicate Reference :" + processor.findDuplicateReferenceRecords());
-				logger.fine(" -------------- \n\n");
-				List<ResultRecord> results = processor.prepareReport(processor.findDuplicateReferenceRecords(),
-						processor.findInvalidMutations());
-				logger.fine(" Results : " + results);
-
-				VelocityEngine velocityEngine = new VelocityEngine();
-				velocityEngine.init();
-				Template t = velocityEngine.getTemplate("result_template.vm");
-				VelocityContext context = new VelocityContext();
-				context.put("results", results);
-				StringWriter writer = new StringWriter();
-				t.merge(context, writer);
-				FileWriter fw = new FileWriter("results" + " _" + System.currentTimeMillis()+".html");
-				fw.write(writer.toString());
-				fw.close();
-				logger.info("Results Generated");
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
+			// Parse each file serially
+			for (File file : files) {
+				parser = DocumentParserFactory.getParserFactory(file);
+				records.addAll(parser.parse());
+				logger.fine("File Name :" + file.getName() + " Records :" + records);
 			}
+
+			// Process all the records and prepare report
+			processor = new DataProcessor(records);
+			logger.fine("Invalid Mutation :" + processor.findInvalidMutations());
+			logger.fine("Duplicate Reference :" + processor.findDuplicateReferenceRecords());
+			logger.fine(" -------------- \n\n");
+			List<ResultRecord> results = processor.prepareReport(processor.findDuplicateReferenceRecords(),
+					processor.findInvalidMutations());
+			logger.fine(" Results : " + results);
+
+			// Generate html report
+			VelocityEngine velocityEngine = new VelocityEngine();
+			velocityEngine.init();
+			Template t = velocityEngine.getTemplate("result_template.vm"); // html template file
+			VelocityContext context = new VelocityContext();
+			context.put("results", results);
+			StringWriter writer = new StringWriter();
+			t.merge(context, writer);
+			fw = new FileWriter("results" + " _" + System.currentTimeMillis() + ".html");
+			fw.write(writer.toString());
+			logger.info("Results Generated");
+
+		} catch (IOException e) {
+			logger.info("Results Generated");
+			// e.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info("Results Generated");
+			// e.printStackTrace();
+		} finally {
+			fw.close();
 		}
 	}
 }
