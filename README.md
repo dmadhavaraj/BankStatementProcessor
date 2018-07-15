@@ -21,4 +21,9 @@ Monthly statements to be processed are kept in "statements" directory.
 This path can be configured using config.properties file.
 Applcation will generate reports under root directory with name results_[timestamp].html format.
 
+# Open issues:
+
+1.  Few negative unit test cases are yet to be implemented
+2.  The report format is yet to be enhanced to show the invalid mutation amount
+3.  Yet to define custom exception for few use cases
 
