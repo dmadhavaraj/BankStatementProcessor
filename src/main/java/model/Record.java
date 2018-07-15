@@ -1,4 +1,5 @@
 package model;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -7,10 +8,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlAttribute;
 
-@XmlRootElement( name = "record" )
-@XmlAccessorType (XmlAccessType.FIELD)
+/**
+ * @author Madhav 
+ * 		   This model object represents the individual transaction record
+ *         Transaction reference number is assumed to be unique and hence its
+ *         used for equals() and hashcode() contract
+ */
+
+@XmlRootElement(name = "record")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Record {
-	
+
 	int referenceNum;
 	String accountNumber;
 	String description;
@@ -22,7 +30,7 @@ public class Record {
 		return referenceNum;
 	}
 
-    @XmlAttribute( name = "reference")
+	@XmlAttribute(name = "reference")
 	public void setReference(int reference) {
 		this.referenceNum = reference;
 	}

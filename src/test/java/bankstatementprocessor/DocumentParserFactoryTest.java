@@ -8,8 +8,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import statementparser.CsvDocumentParser;
 import statementparser.DocumentParser;
 import statementparser.DocumentParserFactory;
+import statementparser.ParserNotSupportedException;
 import statementparser.XmlDocumentParser;
 
 public class DocumentParserFactoryTest {
@@ -28,9 +30,19 @@ public class DocumentParserFactoryTest {
 	public void testGetParserFactory() throws Exception {
 		DocumentParser parser = DocumentParserFactory.getParserFactory(file);
 		assertSame(parser.getClass(), new XmlDocumentParser(file).getClass());
-		// file = new File("test.csv");
-		// assertSame(parser.getClass(), new XmlDocumentParser(file).getClass());
-
+	}
+	
+	@Test
+	public void testGetParserFactoryCsv() throws Exception {
+		file = new File("test.csv");
+		DocumentParser parser = DocumentParserFactory.getParserFactory(file);
+		assertSame(parser.getClass(), new CsvDocumentParser(file).getClass());
+	}
+	
+	@Test(expected = ParserNotSupportedException.class)
+	public void testGetParserFactoryText() throws ParserNotSupportedException {
+		file = new File("test.txt");
+		DocumentParser parser = DocumentParserFactory.getParserFactory(file);
 	}
 
 }

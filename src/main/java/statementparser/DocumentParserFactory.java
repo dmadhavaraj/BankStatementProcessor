@@ -3,7 +3,7 @@ package statementparser;
 import java.io.File;
 
 public class DocumentParserFactory {
-	public static DocumentParser getParserFactory(File file) throws Exception{
+	public static DocumentParser getParserFactory(File file) throws ParserNotSupportedException{
 		DocumentParser parser = null;
 		String fileName = file.getName();
 		if(fileName.endsWith(".xml")) {
@@ -11,7 +11,7 @@ public class DocumentParserFactory {
 		} else if(fileName.endsWith(".csv")) {
 			parser = new CsvDocumentParser(file);
 		} else {
-			throw new Exception("Paser Not Supported");
+			throw new ParserNotSupportedException("Paser is not supported yet. Please check the file type. ");
 		}
 		return parser;
 	}

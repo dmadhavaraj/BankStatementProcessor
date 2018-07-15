@@ -1,5 +1,11 @@
 package model;
 
+/**
+ * @author Madhav 
+ * This model object holds final result to show
+ *
+ */
+
 public class ResultRecord {
 	int referenceNum;
 	String description;
