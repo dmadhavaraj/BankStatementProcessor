@@ -1,19 +1,26 @@
 package bankstatementprocessor;
 
-import model.*;
-import statementprocessor.DataProcessor;
-
-import java.util.*;
-
 import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DataProcessorTest {
+import model.Record;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import statementparser.XmlDocumentParser;
+
+public class XmlDocumentParserTest {
 	List<Record> lst = null;
-	DataProcessor processor = null;
 
 	@Before
 	public void setUp() throws Exception {
@@ -47,24 +54,19 @@ public class DataProcessorTest {
 		record.setEndBalance(-20);
 		lst.add(record);
 
-		processor = new DataProcessor(lst);
 	}
 
 	@After
 	public void tearDown() throws Exception {
-
 	}
 
 	@Test
-	public void testFindDuplicateReferenceRecords() {
-		List<Record> duplicates = processor.findDuplicateReferenceRecords();
-		assertEquals(duplicates.size(), 1);
-	}
+	public void testParse() throws IOException {
+		XmlDocumentParser mock = mock(XmlDocumentParser.class);
 
-	@Test
-	public void testFindInvalidMutations() {
-		List<Record> invalidMutation = processor.findInvalidMutations();
-		assertEquals(invalidMutation.size(), 1);
+		when(mock.parse()).thenReturn(lst);
+
+		assertEquals(mock.parse().size(), 3);
 	}
 
 }
